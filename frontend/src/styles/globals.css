@@ -34,20 +34,8 @@ body {
 }
 
 .calendar-nav button {
-    background: var(--main-color);
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
+    transition-property: all;
     font-size: 1rem;
-    transition: all 0.3s;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.calendar-nav button:hover {
-    background: var(--main-color-light);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 button#prev:hover {
@@ -108,7 +96,7 @@ button#next:hover {
     right: 2px;
     font-size: 0.6rem;
     background: white;
-    color: #4caf50;
+    color: var(--main-color);
     padding: 2px 4px;
     border-radius: 4px;
 }
@@ -233,17 +221,16 @@ h1#title::after {
     border-color: var(--main-color-light);
 }
 
-.modal-content button {
-    background-color: #4caf50;
+button {
+    background-color: var(--main-color);
     color: white;
     border: none;
     padding: 8px 16px;
     border-radius: 4px;
-    margin-left: 8px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.modal-content button:hover {
+button:hover {
     background-color: var(--main-color-light);
 }

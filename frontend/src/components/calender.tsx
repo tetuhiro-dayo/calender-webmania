@@ -8,6 +8,7 @@ import { getArt } from "@/arts";
 import Image from "next/image";
 import { generateCalendar } from "@/functions/generateCalender";
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const error = (err: string | Error) => {
     const message = err instanceof Error ? err.message : err;
@@ -26,6 +27,11 @@ const Calender = () => {
     const [uploadOpen, setUploadOpen] = useState(false);
     const [artTitle, setArtTitle] = useState<string>("");
     const [imageFile, setImageFile] = useState<File | null>(null);
+    const router = useRouter();
+    const toLoginPage = () => {
+        toast("ログインしてください！");
+        router.push("/login");
+    };
 
     // モーダルでイベントを作成
     const handleCreate = async () => {
@@ -133,6 +139,8 @@ const Calender = () => {
                         {generateCalendar(currentDate.getFullYear(), currentDate.getMonth() + 1, events, date => {
                             if (token) {
                                 setSelectedDate(date); // クリックで日付セット
+                            } else {
+                                toLoginPage();
                             }
                         })}
                     </tbody>
@@ -160,39 +168,44 @@ const Calender = () => {
                     </div>
                 </Modal>
             )}
-
-            {token && (
-                <div className="art-upload">
-                    <h3>今月のテーマ: 「{seasonalArt.month}月のサーバー室」</h3>
-                    <button onClick={() => setUploadOpen(true)} className="upload-button">
-                        イラストを投稿
-                    </button>
-                    <Modal isOpen={uploadOpen} onClose={() => setUploadOpen(false)} title="イラストを投稿">
-                        <input
-                            type="text"
-                            placeholder="タイトル"
-                            value={artTitle}
-                            onChange={e => setArtTitle(e.target.value)}
-                            className="w-full border px-3 py-2 rounded"
-                        />
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={e => {
-                                if (e.target.files && e.target.files[0]) {
-                                    setImageFile(e.target.files[0]);
-                                }
-                            }}
-                            className="w-full border px-3 py-2 rounded"
-                        />
-                        <div className="flex justify-end gap-2">
-                            <button onClick={handleSubmitArt} className="bg-green-500 text-white px-4 py-2 rounded">
-                                送信
-                            </button>
-                        </div>
-                    </Modal>
-                </div>
-            )}
+            <div className="art-upload">
+                <h3>今月のテーマ: 「{seasonalArt.month}月のサーバー室」</h3>
+                <button
+                    onClick={() => {
+                        if (token) {
+                            setUploadOpen(true);
+                        } else {
+                            toLoginPage();
+                        }
+                    }}
+                    className="upload-button">
+                    イラストを投稿
+                </button>
+                <Modal isOpen={uploadOpen} onClose={() => setUploadOpen(false)} title="イラストを投稿">
+                    <input
+                        type="text"
+                        placeholder="タイトル"
+                        value={artTitle}
+                        onChange={e => setArtTitle(e.target.value)}
+                        className="w-full border px-3 py-2 rounded"
+                    />
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={e => {
+                            if (e.target.files && e.target.files[0]) {
+                                setImageFile(e.target.files[0]);
+                            }
+                        }}
+                        className="w-full border px-3 py-2 rounded"
+                    />
+                    <div className="flex justify-end gap-2">
+                        <button onClick={handleSubmitArt} className="bg-green-500 text-white px-4 py-2 rounded">
+                            送信
+                        </button>
+                    </div>
+                </Modal>
+            </div>
         </div>
     );
 };
