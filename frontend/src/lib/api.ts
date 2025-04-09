@@ -1,7 +1,5 @@
-// lib/api.ts
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
-// lib/api.ts
 export const fetchEvents = async (start: string, end: string, token: string) => {
     const res = await fetch(`${baseURL}/events/range?start=${start}&end=${end}`, {
         method: "GET",
@@ -68,6 +66,23 @@ export const createEvent = async ({
             Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ title, date }),
+    });
+
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || "イベント作成に失敗しました。");
+    }
+
+    return await res.json();
+};
+
+export const createArt = async (formData: FormData) => {
+    const res = await fetch(`${baseURL}/arts`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        body: formData,
     });
 
     if (!res.ok) {

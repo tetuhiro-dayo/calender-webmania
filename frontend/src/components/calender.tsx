@@ -1,12 +1,19 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Modal from "./modal";
-import { createEvent, fetchEvents } from "@/lib/api";
+import { createEvent, fetchEvents, createArt } from "@/lib/api"; // createArt をインポート（用意済みの場合）
 import type { EventType } from "@/types";
 import { getArt } from "@/arts";
 import Image from "next/image";
 import { generateCalendar } from "@/functions/generateCalender";
+import { toast } from "react-hot-toast";
+
+const error = (err: string | Error) => {
+    const message = err instanceof Error ? err.message : err;
+    toast.error(message);
+    console.error(message);
+};
 
 const Calender = () => {
     const today = useMemo(() => new Date(), []);
@@ -14,8 +21,11 @@ const Calender = () => {
     const [events, setEvents] = useState<EventType[]>([]);
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const [newTitle, setNewTitle] = useState("");
-    const [refresh, setRefresh] = useState(false); // イベント再取得用
+    const [refresh, setRefresh] = useState(false);
     const token = typeof window !== "undefined" ? localStorage.getItem("token") : "";
+    const [uploadOpen, setUploadOpen] = useState(false);
+    const [artTitle, setArtTitle] = useState<string>("");
+    const [imageFile, setImageFile] = useState<File | null>(null);
 
     // モーダルでイベントを作成
     const handleCreate = async () => {
@@ -25,9 +35,9 @@ const Calender = () => {
             setNewTitle("");
             setSelectedDate(null);
             setRefresh(prev => !prev); // useEffectトリガー用
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (err: any) {
-            alert(err.message);
+            toast.success("イベントを追加しました！");
+        } catch (err) {
+            error(err);
         }
     };
 
@@ -38,6 +48,26 @@ const Calender = () => {
             newDate.setMonth(newDate.getMonth() + increment);
             return newDate;
         });
+    };
+
+    const handleSubmitArt = async () => {
+        if (!artTitle || !imageFile) {
+            toast.error("タイトルと画像ファイルの両方を入力してください");
+            return;
+        }
+        try {
+            const formData = new FormData();
+            formData.append("title", artTitle);
+            formData.append("file", imageFile);
+            // createArt API関数でイラスト投稿を処理
+            await createArt(formData, token || "");
+            toast.success("イラストを投稿しました！");
+            setArtTitle("");
+            setImageFile(null);
+            setUploadOpen(false);
+        } catch (err) {
+            error(err);
+        }
     };
 
     useEffect(() => {
@@ -51,7 +81,7 @@ const Calender = () => {
                 const data = await fetchEvents(start, end, token || "");
                 setEvents(data);
             } catch (err) {
-                console.error("イベントの取得に失敗しました", err);
+                error("イベントの取得に失敗しました: " + err);
             }
         };
 
@@ -100,12 +130,11 @@ const Calender = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {generateCalendar(
-                            currentDate.getFullYear(),
-                            currentDate.getMonth() + 1,
-                            events,
-                            date => setSelectedDate(date), // クリックで日付セット
-                        )}
+                        {generateCalendar(currentDate.getFullYear(), currentDate.getMonth() + 1, events, date => {
+                            if (token) {
+                                setSelectedDate(date); // クリックで日付セット
+                            }
+                        })}
                     </tbody>
                 </table>
             </div>
@@ -113,22 +142,57 @@ const Calender = () => {
                 <Modal
                     title={selectedDate + " にイベント追加"}
                     isOpen={!!selectedDate}
-                    onClose={() => setSelectedDate("")}>
+                    onClose={() => setSelectedDate(null)}>
                     <input
                         type="text"
                         value={newTitle}
                         onChange={e => setNewTitle(e.target.value)}
                         placeholder="イベントタイトル"
+                        className="w-full border px-3 py-2 rounded"
                     />
-                    <button onClick={handleCreate}>追加</button>
-                    <button onClick={() => setSelectedDate(null)}>キャンセル</button>
+                    <div className="flex justify-end gap-2">
+                        <button onClick={handleCreate} className="bg-green-500 text-white px-4 py-2 rounded">
+                            追加
+                        </button>
+                        <button onClick={() => setSelectedDate(null)} className="bg-gray-300 px-4 py-2 rounded">
+                            キャンセル
+                        </button>
+                    </div>
                 </Modal>
             )}
 
-            <div className="art-upload">
-                <h3>今月のテーマ: 「{seasonalArt.month}月のサーバー室」</h3>
-                <button className="upload-button">イラストを投稿</button>
-            </div>
+            {token && (
+                <div className="art-upload">
+                    <h3>今月のテーマ: 「{seasonalArt.month}月のサーバー室」</h3>
+                    <button onClick={() => setUploadOpen(true)} className="upload-button">
+                        イラストを投稿
+                    </button>
+                    <Modal isOpen={uploadOpen} onClose={() => setUploadOpen(false)} title="イラストを投稿">
+                        <input
+                            type="text"
+                            placeholder="タイトル"
+                            value={artTitle}
+                            onChange={e => setArtTitle(e.target.value)}
+                            className="w-full border px-3 py-2 rounded"
+                        />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={e => {
+                                if (e.target.files && e.target.files[0]) {
+                                    setImageFile(e.target.files[0]);
+                                }
+                            }}
+                            className="w-full border px-3 py-2 rounded"
+                        />
+                        <div className="flex justify-end gap-2">
+                            <button onClick={handleSubmitArt} className="bg-green-500 text-white px-4 py-2 rounded">
+                                送信
+                            </button>
+                        </div>
+                    </Modal>
+                </div>
+            )}
         </div>
     );
 };
