@@ -38,6 +38,7 @@ export const generateCalendar = (
                 nextDay++;
             } else {
                 const currentDateStr = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+                const todayStr = new Date().toLocaleDateString("sv-SE"); // sv-SEにするとyyyy-mm-ddにしてくれるらしい。神。
                 const dayEvents = events.filter(e => {
                     if (e.date === currentDateStr) {
                         return true;
@@ -46,7 +47,7 @@ export const generateCalendar = (
                         return true;
                     }
                 });
-                const isToday = currentDateStr === new Date().toISOString().split("T")[0];
+                const isToday = currentDateStr === todayStr;
 
                 days.push(
                     <td

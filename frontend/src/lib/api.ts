@@ -76,7 +76,7 @@ export const createEvent = async ({
     return await res.json();
 };
 
-export const createArt = async (formData: FormData) => {
+export const createArt = async (formData: FormData, token: string) => {
     const res = await fetch(`${baseURL}/arts`, {
         method: "POST",
         headers: {
