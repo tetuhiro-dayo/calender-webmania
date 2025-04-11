@@ -1,11 +1,9 @@
 import { EventType } from "@/types";
+import { useMemo } from "react";
 
-export const generateCalendar = (
-    year: number,
-    month: number,
-    events: EventType[],
-    onDateClick: (date: string) => void,
-) => {
+export const useCalendar = (date: Date, events: EventType[], onDateClick: (date: string) => void) => {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
     const startDate = new Date(year, month - 1, 1);
     const endDate = new Date(year, month, 0);
     const startDay = startDate.getDay();
@@ -14,6 +12,10 @@ export const generateCalendar = (
     const weeks = [];
     let day = 1;
     let nextDay = 1;
+
+    const todayStr = useMemo(() => {
+        return new Date().toLocaleDateString("sv-SE"); // sv-SEにするとyyyy-mm-ddにしてくれるらしい。神。
+    }, []);
 
     for (let i = 0; i < 6; i++) {
         const days = [];
@@ -38,7 +40,6 @@ export const generateCalendar = (
                 nextDay++;
             } else {
                 const currentDateStr = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-                const todayStr = new Date().toLocaleDateString("sv-SE"); // sv-SEにするとyyyy-mm-ddにしてくれるらしい。神。
                 const dayEvents = events.filter(e => {
                     if (e.date === currentDateStr) {
                         return true;

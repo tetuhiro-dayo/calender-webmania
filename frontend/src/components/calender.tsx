@@ -6,7 +6,7 @@ import { createEvent, fetchEvents, createArt } from "@/lib/api"; // createArt �
 import type { EventType } from "@/types";
 import { getArt } from "@/arts";
 import Image from "next/image";
-import { generateCalendar } from "@/functions/generateCalender";
+import { useCalendar } from "@/hooks/useCalender";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
@@ -32,6 +32,13 @@ const Calender = () => {
         toast("ログインしてください！");
         router.push("/login");
     };
+    const calender = useCalendar(currentDate, events, date => {
+        if (token) {
+            setSelectedDate(date); // クリックで日付セット
+        } else {
+            toLoginPage();
+        }
+    });
 
     // モーダルでイベントを作成
     const handleCreate = async () => {
@@ -135,15 +142,7 @@ const Calender = () => {
                             ))}
                         </tr>
                     </thead>
-                    <tbody>
-                        {generateCalendar(currentDate.getFullYear(), currentDate.getMonth() + 1, events, date => {
-                            if (token) {
-                                setSelectedDate(date); // クリックで日付セット
-                            } else {
-                                toLoginPage();
-                            }
-                        })}
-                    </tbody>
+                    <tbody>{calender}</tbody>
                 </table>
             </div>
             {selectedDate && (
