@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Modal from "./modal";
-import { createEvent, fetchEvents, createArt } from "@/lib/api"; // createArt をインポート（用意済みの場合）
+import { createEvent, fetchEvents, createArt } from "@/lib/api";
 import type { EventType } from "@/types";
 import { getArt } from "@/arts";
 import Image from "next/image";
@@ -32,13 +32,15 @@ const Calender = () => {
         toast("ログインしてください！");
         router.push("/login");
     };
-    const calender = useCalendar(currentDate, events, date => {
+    const c = useCalendar(currentDate, events, date => {
         if (token) {
             setSelectedDate(date); // クリックで日付セット
         } else {
             toLoginPage();
         }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const calender = useMemo(() => c, [currentDate, events, c]);
 
     // モーダルでイベントを作成
     const handleCreate = async () => {
