@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Register } from "@/lib/api";
+import { Register as PostRegister } from "@/lib/api";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 import "@/styles/form.css";
@@ -14,11 +14,9 @@ export default function Register() {
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError("");
-        setSuccess("");
 
         try {
-            await Register({ email, password });
+            await PostRegister({ email, password });
             toast.success("登録が完了しました！ログインしてください。");
             setTimeout(() => router.push("/login"), 1500); // 1.5秒後にログインページへ
         } catch (err) {
