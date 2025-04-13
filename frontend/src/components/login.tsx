@@ -19,7 +19,8 @@ export default function Login() {
             localStorage.setItem("token", res.token); // トークン保存
             router.push("/"); // トップページへリダイレクト
         } catch (err) {
-            toast.error(err.message || "不明なエラーが発生しました");
+            const message = err instanceof Error ? err.message : "不明なエラーが発生しました";
+            toast.error(message);
         }
     };
 

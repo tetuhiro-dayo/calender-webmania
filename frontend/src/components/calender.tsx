@@ -10,8 +10,8 @@ import { useCalendar } from "@/hooks/useCalender";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-const error = (err: string | Error) => {
-    const message = err instanceof Error ? err.message : err;
+const error = (err: unknown) => {
+    const message = err instanceof Error ? err.message : String(err);
     toast.error(message);
     console.error(message);
 };

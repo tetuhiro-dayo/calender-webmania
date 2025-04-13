@@ -20,7 +20,8 @@ export default function Register() {
             toast.success("登録が完了しました！ログインしてください。");
             setTimeout(() => router.push("/login"), 1500); // 1.5秒後にログインページへ
         } catch (err) {
-            toast.error(err.message || "登録に失敗しました。");
+            const message = err instanceof Error ? err.message : "不明なエラーが発生しました";
+            toast.error(message || "登録に失敗しました。");
         }
     };
 
