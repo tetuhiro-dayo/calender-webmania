@@ -9,13 +9,13 @@ import "@/styles/form.css";
 
 export default function Login() {
     const router = useRouter();
-    const [email, setEmail] = useState<string>("");
+    const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await PostLogin({ email, password });
+            const res = await PostLogin({ username, password });
             localStorage.setItem("token", res.token); // トークン保存
             router.push("/"); // トップページへリダイレクト
         } catch (err) {
@@ -29,8 +29,14 @@ export default function Login() {
             <h1>ログイン</h1>
             <form onSubmit={handleLogin}>
                 <div>
-                    <label htmlFor="email">メールアドレス</label>
-                    <input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+                    <label htmlFor="username">ユーザーネーム</label>
+                    <input
+                        id="username"
+                        type="username"
+                        value={username}
+                        onChange={e => setUsername(e.target.value)}
+                        required
+                    />
                 </div>
                 <div>
                     <label htmlFor="password">パスワード</label>

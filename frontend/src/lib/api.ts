@@ -1,94 +1,72 @@
-const baseURL = process.env.NEXT_PUBLIC_API_URL;
+// lib/api.ts
+const baseURL = "/api"; // 相対パスならVercelでもOK
 
-export const fetchEvents = async (start: string, end: string, token: string) => {
-    const res = await fetch(`${baseURL}/events/range?start=${start}&end=${end}`, {
+// 共通Fetchヘルパー
+const fetchWithError = async (input: RequestInfo, init?: RequestInit) => {
+    const res = await fetch(input, init);
+    if (!res.ok) {
+        const error = await res.json().catch(() => ({}));
+        throw new Error(error.message || "通信エラーが発生しました。");
+    }
+    return res.json();
+};
+
+// イベント取得（期間指定）
+export const FetchEvents = async (start: string, end: string, token: string) => {
+    return fetchWithError(`${baseURL}/events/range?start=${start}&end=${end}`, {
         method: "GET",
         headers: {
             Authorization: `Bearer ${token}`,
         },
-        cache: "no-store", // SSRならこのオプションがあると便利（任意）
+        cache: "no-store",
     });
-
-    if (!res.ok) {
-        throw new Error("イベント取得に失敗しました");
-    }
-
-    const data = await res.json();
-    return data;
 };
 
-export const Login = async (object: { email: string; password: string }) => {
-    const res = await fetch(`${baseURL}/api/auth/login`, {
+// ログイン
+export const Login = async (credentials: { username: string; password: string }) => {
+    return fetchWithError(`${baseURL}/auth/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(object),
+        body: JSON.stringify(credentials),
     });
-    if (!res.ok) {
-        throw new Error("ログインに失敗しました。");
-    }
-
-    const data = await res.json();
-    return data;
 };
 
-export const Register = async ({ email, password }: { email: string; password: string }) => {
-    const res = await fetch(`${baseURL}/api/auth/register`, {
+// 登録
+export const Register = async (data: { username: string; password: string }) => {
+    return fetchWithError(`${baseURL}/auth/register`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(data),
     });
-
-    if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || "登録に失敗しました。");
-    }
-
-    return await res.json();
 };
 
-export const createEvent = async ({
-    title,
-    date,
-    token,
-}: {
-    title: string;
-    date: string; // "YYYY-MM-DD"
-    token: string;
-}) => {
-    const res = await fetch(`${baseURL}/events`, {
+// イベント追加
+export const CreateEvent = async ({ title, date, token }: { title: string; date: string; token: string }) => {
+    return fetchWithError(`${baseURL}/events/add`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ title, date }),
+        body: JSON.stringify({
+            title,
+            start_date: date,
+            end_date: date,
+        }),
     });
-
-    if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message || "イベント作成に失敗しました。");
-    }
-
-    return await res.json();
 };
 
-export const createArt = async (formData: FormData, token: string) => {
-    const res = await fetch(`${baseURL}/arts`, {
+// イラスト投稿
+export const CreateArt = async (formData: FormData, token: string) => {
+    return fetchWithError(`${baseURL}/arts`, {
         method: "POST",
         headers: {
             Authorization: `Bearer ${token}`,
         },
         body: formData,
     });
-
-    if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message || "イベント作成に失敗しました。");
-    }
-
-    return await res.json();
 };

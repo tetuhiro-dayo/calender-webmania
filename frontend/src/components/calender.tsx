@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Modal from "./modal";
-import { createEvent, fetchEvents, createArt } from "@/lib/api";
+import { CreateEvent, FetchEvents, CreateArt } from "@/lib/api";
 import type { EventType } from "@/types";
 import { getArt } from "@/arts";
 import Image from "next/image";
@@ -46,7 +46,7 @@ const Calender = () => {
     const handleCreate = async () => {
         if (!selectedDate) return;
         try {
-            await createEvent({ title: newTitle, date: selectedDate, token: token || "" });
+            await CreateEvent({ title: newTitle, date: selectedDate, token: token || "" });
             setNewTitle("");
             setSelectedDate(null);
             setRefresh(prev => !prev); // useEffectトリガー用
@@ -74,8 +74,8 @@ const Calender = () => {
             const formData = new FormData();
             formData.append("title", artTitle);
             formData.append("file", imageFile);
-            // createArt API関数でイラスト投稿を処理
-            await createArt(formData, token || "");
+            // CreateArt API関数でイラスト投稿を処理
+            await CreateArt(formData, token || "");
             toast.success("イラストを投稿しました！");
             setArtTitle("");
             setImageFile(null);
@@ -93,7 +93,7 @@ const Calender = () => {
             const end = new Date(year, month + 1, 0).toISOString().split("T")[0];
 
             try {
-                const data = await fetchEvents(start, end, token || "");
+                const data = await FetchEvents(start, end, token || "");
                 setEvents(data);
             } catch (err) {
                 error("イベントの取得に失敗しました: " + err);
