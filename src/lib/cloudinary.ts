@@ -7,7 +7,13 @@ cloudinary.config({
     secure: true,
 });
 
-export const uploadImage = async (buffer: Buffer) => {
+type UploadResult =
+    | {
+          secure_url: string;
+      }
+    | undefined;
+
+export const uploadImage = async (buffer: Buffer): Promise<UploadResult> => {
     return new Promise((resolve, reject) => {
         cloudinary.uploader
             .upload_stream({ folder: "calendar-art" }, (error, result) => {

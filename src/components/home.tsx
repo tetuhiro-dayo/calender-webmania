@@ -5,7 +5,6 @@ import Modal from "./modal";
 import { CreateEvent, FetchEvents, GetArt } from "@/lib/api";
 import type { ArtType, EventType } from "@/types";
 import Image from "next/image";
-import { useCalendar } from "@/hooks/useCalender";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import UploadArt from "./uploadArt";

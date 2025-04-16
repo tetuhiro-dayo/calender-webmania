@@ -24,8 +24,11 @@ export async function POST(req: NextRequest) {
         }
 
         const buffer = Buffer.from(await file.arrayBuffer());
-        const uploaded = await uploadImage(buffer);
-        const uploadedUrl = (uploaded as any).secure_url;
+        const result = await uploadImage(buffer);
+        if (!result) {
+            return NextResponse.json({ message: "アップロードに失敗しました。" }, { status: 500 });
+        }
+        const uploadedUrl = result.secure_url;
 
         const now = new Date();
 
