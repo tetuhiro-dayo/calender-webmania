@@ -60,9 +60,16 @@ export const CreateEvent = async ({ title, date, token }: { title: string; date:
     });
 };
 
+export const GetArt = async ({ year, month }: { year: number; month: number }) => {
+    const params = new URLSearchParams({ year: String(year), month: String(month) });
+    return fetchWithError(`${baseURL}/art?${params}`, {
+        method: "GET",
+    });
+};
+
 // イラスト投稿
 export const CreateArt = async (formData: FormData, token: string) => {
-    return fetchWithError(`${baseURL}/arts`, {
+    return fetchWithError(`${baseURL}/art/add`, {
         method: "POST",
         headers: {
             Authorization: `Bearer ${token}`,

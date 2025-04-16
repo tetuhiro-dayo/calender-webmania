@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Calender from "@/components/calender";
+import Home from "@/components/home";
 
 export const metadata: Metadata = {
     title: "カレンダー",
 };
 
-export default function Home() {
-    return <Calender />;
+export default function HomePage() {
+    return <Home />;
 }

@@ -47,4 +47,5 @@ model Art {
     user       User?    @relation(fields: [userId], references: [id])
     userId     Int?
     @@index([month, year])
+    @@unique([month, year])
 }
