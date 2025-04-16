@@ -13,11 +13,10 @@ export async function GET(req: NextRequest) {
 
         const arts = await prisma.art.findUnique({
             where: {
-                year,
-                month,
-            },
-            orderBy: {
-                created_at: "desc",
+                month_year: {
+                    year,
+                    month,
+                },
             },
             include: {
                 user: {
