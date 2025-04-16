@@ -15,17 +15,17 @@ export async function POST(req: NextRequest) {
         }
 
         const body = await req.json();
-        const { title, date } = body;
+        const { title, start_date, end_date } = body;
 
-        if (!title || !date) {
+        if (!title || !start_date || !end_date) {
             return NextResponse.json({ message: "タイトルと日付が必要です" }, { status: 400 });
         }
 
         const event = await prisma.event.create({
             data: {
                 title,
-                start_date: new Date(date),
-                end_date: new Date(date),
+                start_date: new Date(start_date),
+                end_date: new Date(end_date),
                 created_by: user.id,
             },
         });
