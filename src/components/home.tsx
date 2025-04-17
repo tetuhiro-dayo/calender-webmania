@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Modal from "./modal";
-import { CreateEvent, FetchEvents, GetArt } from "@/lib/api";
-import type { ArtType, EventType } from "@/types";
+import { CreateEvent, GetArt } from "@/lib/api";
+import type { ArtType } from "@/types";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -14,10 +14,8 @@ import Calendar from "./calender";
 const Home = () => {
     const today = useMemo(() => new Date(), []);
     const [currentDate, setCurrentDate] = useState(today);
-    const [events, setEvents] = useState<EventType[]>([]);
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const [newTitle, setNewTitle] = useState("");
-    const [refresh, setRefresh] = useState(false);
     const [art, setArt] = useState<ArtType | null>(null);
     const token = typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
 
@@ -34,7 +32,7 @@ const Home = () => {
             await CreateEvent({ title: newTitle, date: selectedDate, token: token || "" });
             setNewTitle("");
             setSelectedDate(null);
-            setRefresh(prev => !prev); // useEffectトリガー用
+            router.refresh();
             toast.success("イベントを追加しました！");
         } catch (err) {
             error(err);
@@ -49,26 +47,6 @@ const Home = () => {
             return newDate;
         });
     };
-
-    useEffect(() => {
-        const fetchAndSetEvents = async () => {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-            const start = new Date(year, month, 1).toISOString().split("T")[0];
-            const end = new Date(year, month + 1, 0).toISOString().split("T")[0];
-
-            try {
-                const data = await FetchEvents(start, end, token || "");
-                setEvents(data);
-            } catch (err) {
-                error("イベントの取得に失敗しました: " + err);
-            }
-        };
-
-        if (token) {
-            fetchAndSetEvents();
-        }
-    }, [currentDate, token, refresh]);
 
     // 季節のイラスト取得
     useEffect(() => {
@@ -120,7 +98,7 @@ const Home = () => {
 
             <Calendar
                 date={currentDate}
-                events={events}
+                token={token}
                 onDateClick={date => {
                     if (token) {
                         setSelectedDate(date); // クリックで日付セット
