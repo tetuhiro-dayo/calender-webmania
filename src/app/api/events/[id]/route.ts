@@ -5,6 +5,7 @@ import { getTokenPayload } from "@/lib/auth";
 export async function PUT(req: NextRequest, context: { params: { id: string } }) {
     const token = req.headers.get("authorization")?.split(" ")[1];
     const user = getTokenPayload(token || "");
+    const { id } = await context.params;
 
     if (!user) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
@@ -13,7 +14,7 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
 
     try {
         const updated = await prisma.event.update({
-            where: { id: Number(context.params.id), created_by: user.id },
+            where: { id: Number(id), created_by: user.id },
             data: { title, date: new Date(date) },
         });
         return NextResponse.json(updated);
@@ -25,12 +26,13 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
 export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
     const token = req.headers.get("authorization")?.split(" ")[1];
     const user = getTokenPayload(token || "");
+    const { id } = await context.params;
 
     if (!user) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
     try {
         await prisma.event.delete({
-            where: { id: Number(context.params.id), created_by: user.id },
+            where: { id: Number(id), created_by: user.id },
         });
         return NextResponse.json({ success: true });
     } catch {
