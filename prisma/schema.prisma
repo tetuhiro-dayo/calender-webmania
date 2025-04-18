@@ -22,8 +22,7 @@ model Event {
     id                 Int       @id @default(autoincrement())
     title              String
     description        String?
-    start_date         DateTime
-    end_date           DateTime
+    date               DateTime
     is_holiday         Boolean   @default(false)
     is_recurring       Boolean   @default(false)
     recurrence_pattern Json?

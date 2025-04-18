@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Register as PostRegister } from "@/lib/api";
+import { Register as PostRegister } from "@/lib/api/auth";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 import "@/styles/form.css";

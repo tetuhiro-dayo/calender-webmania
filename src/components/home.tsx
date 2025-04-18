@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Modal from "./modal";
-import { CreateEvent, GetArt } from "@/lib/api";
 import type { ArtType } from "@/types";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
@@ -10,6 +9,8 @@ import { useRouter } from "next/navigation";
 import UploadArt from "./uploadArt";
 import { error } from "@/functions/error";
 import Calendar from "./calender";
+import { CreateEvent } from "@/lib/api/events";
+import { GetArt } from "@/lib/api/art";
 
 const Home = () => {
     const today = useMemo(() => new Date(), []);

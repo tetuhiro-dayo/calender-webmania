@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { FetchEvents } from "@/lib/api";
+import { FetchEvents } from "@/lib/api/events";
 import { EventType } from "@/types";
 import toast from "react-hot-toast";
 

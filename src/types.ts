@@ -1,4 +1,5 @@
 export interface EventType {
+    id: number;
     date: string;
     title: string;
     author?: string;

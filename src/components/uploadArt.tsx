@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Modal from "./modal";
 import toast from "react-hot-toast";
-import { CreateArt } from "@/lib/api";
+import { CreateArt } from "@/lib/api/art";
 import { error } from "@/functions/error";
 import type { ArtType } from "@/types";
 
