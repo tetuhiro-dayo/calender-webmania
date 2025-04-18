@@ -5,6 +5,8 @@
 :root {
     --main-color: #4caf50;
     --main-color-light: #67d06a;
+    --main-color-fg: #062807;
+    --main-color-fg-light: #09460b;
 }
 
 body {
@@ -241,4 +243,14 @@ input[type="file"] {
 ::file-selector-button,
 ::-webkit-file-upload-button {
     margin-right: 0.8rem;
+}
+
+a {
+    text-decoration: none;
+    color: var(--main-color-fg);
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: var(--main-color-fg-light);
 }
