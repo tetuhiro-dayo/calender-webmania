@@ -221,9 +221,7 @@ h1#title::after {
     border-color: var(--main-color-light);
 }
 
-button,
-::file-selector-button,
-::-webkit-file-upload-button {
+:is(button, ::file-selector-button, ::-webkit-file-upload-button) {
     background-color: var(--main-color);
     color: white;
     border: none;
@@ -231,10 +229,9 @@ button,
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
-}
-
-:is(button, ::file-selector-button, ::-webkit-file-upload-button):hover {
-    background-color: var(--main-color-light);
+    &:hover {
+        background-color: var(--main-color-light);
+    }
 }
 
 input[type="file"] {
