@@ -28,7 +28,7 @@ export const CreateEvent = async ({ title, date, token }: { title: string; date:
 };
 
 export const updateEvent = async (id: number, data: Partial<EventType>, token: string) => {
-    const res = await fetch(`/events/${id}/edit`, {
+    const res = await fetch(`/events/${id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -40,7 +40,7 @@ export const updateEvent = async (id: number, data: Partial<EventType>, token: s
 };
 
 export const deleteEvent = async (id: number, token: string) => {
-    const res = await fetch(`/events/${id}/delete`, {
+    const res = await fetch(`/events/${id}`, {
         method: "DELETE",
         headers: {
             Authorization: `Bearer ${token}`,
