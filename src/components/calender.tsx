@@ -38,13 +38,18 @@ const Calendar = ({ date, onDateClick, token }: Props) => {
         const fetchEventsAndUpdate = async () => {
             const start = new Date(year, month - 1, 1).toISOString().split("T")[0];
             const end = new Date(year, month, 0).toISOString().split("T")[0];
+
             try {
                 const data = await FetchEvents(start, end, token);
                 setEvents(data);
             } catch (err) {
-                toast.error("イベントの取得に失敗しました: " + err);
+                const message = err instanceof Error ? err.message : String(err);
+                if (message !== "Login.") {
+                    toast.error("イベントの取得に失敗しました: " + message);
+                }
             }
         };
+
         fetchEventsAndUpdate();
     }, [token, month, year]);
 

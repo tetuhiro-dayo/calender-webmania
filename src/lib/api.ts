@@ -6,6 +6,9 @@ const fetchWithError = async (input: RequestInfo, init?: RequestInit) => {
     const res = await fetch(input, init);
     if (!res.ok) {
         const error = await res.json().catch(() => ({}));
+        if (res.status === 401) {
+            throw new Error("Login.");
+        }
         throw new Error(error.message || "通信エラーが発生しました。");
     }
     return res.json();
