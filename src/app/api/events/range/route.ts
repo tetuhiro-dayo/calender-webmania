@@ -24,15 +24,13 @@ export async function GET(req: NextRequest) {
 
         const events = await prisma.event.findMany({
             where: {
-                start_date: {
+                date: {
                     gte: new Date(start),
-                },
-                end_date: {
-                    lte: new Date(end),
+                    lt: new Date(end),
                 },
             },
             orderBy: {
-                start_date: "asc",
+                date: "asc",
             },
         });
 
