@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getTokenPayload } from "@/lib/auth";
 
-export async function PUT(req: NextRequest, context: { params: { id: string } }) {
+export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     const token = req.headers.get("authorization")?.split(" ")[1];
     const user = getTokenPayload(token || "");
     const { id } = await context.params;
@@ -23,7 +23,7 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
     }
 }
 
-export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     const token = req.headers.get("authorization")?.split(" ")[1];
     const user = getTokenPayload(token || "");
     const { id } = await context.params;
