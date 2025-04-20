@@ -1,4 +1,4 @@
-import DayView from "./dayVIew";
+import DayView from "./dayView";
 import MonthView from "./monthView";
 import WeekView from "./weekView";
 import { ViewType } from "@/types";
