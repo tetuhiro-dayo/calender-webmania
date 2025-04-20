@@ -12,6 +12,7 @@ import { CreateEvent } from "@/lib/api/events";
 import { GetArt } from "@/lib/api/art";
 import View from "./views/View";
 import { getToken } from "@/functions/getToken";
+import ViewSwitcher from "./viewSwitcher";
 
 interface Props {
     date: Date;
@@ -69,10 +70,6 @@ const CalenderPage = ({ date, viewType }: Props) => {
         fetchArt();
     }, [date]);
 
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-
     return (
         <div className="calender-container">
             {art ? (
@@ -103,26 +100,7 @@ const CalenderPage = ({ date, viewType }: Props) => {
                     次月 〉
                 </button>
             </div>
-            <div className="view-switcher">
-                <button className={viewType === "year" ? "active" : ""} onClick={() => router.push(`/year/${year}`)}>
-                    年
-                </button>
-                <button
-                    className={viewType === "month" ? "active" : ""}
-                    onClick={() => router.push(`/month/${year}-${month}`)}>
-                    月
-                </button>
-                <button
-                    className={viewType === "week" ? "active" : ""}
-                    onClick={() => router.push(`/week/${year}-${month}-${day}`)}>
-                    週
-                </button>
-                <button
-                    className={viewType === "day" ? "active" : ""}
-                    onClick={() => router.push(`/day/${year}-${month}-${day}`)}>
-                    日
-                </button>
-            </div>
+            <ViewSwitcher viewType={viewType} date={date} />
 
             {
                 <View

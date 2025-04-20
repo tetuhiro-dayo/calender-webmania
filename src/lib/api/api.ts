@@ -1,4 +1,3 @@
-// lib/api.ts
 const baseURL = "/api"; // 相対パスならVercelでもOK
 
 // 共通Fetchヘルパー

@@ -5,6 +5,8 @@ import { FetchEvents } from "@/lib/api/events";
 import { EventType } from "@/types";
 import toast from "react-hot-toast";
 import { getToken } from "@/functions/getToken";
+import "@/styles/week.css";
+import { isToday } from "@/functions/isToday";
 
 interface Props {
     date: Date;
@@ -40,7 +42,8 @@ const WeekView = ({ date }: Props) => {
             try {
                 const data = await FetchEvents(start, end, token);
                 setEvents(data);
-            } catch {
+            } catch (err: unknown) {
+                console.error(err);
                 toast.error("週のイベント取得に失敗しました");
             }
         };
@@ -48,21 +51,19 @@ const WeekView = ({ date }: Props) => {
     }, [weekStart, token]);
 
     return (
-        <div className="week-view grid grid-cols-7 gap-2">
+        <div className="week-view">
             {days.map((day, idx) => {
                 const dateStr = day.toISOString().split("T")[0];
                 const dayEvents = events.filter(e => e.date === dateStr);
 
                 return (
-                    <div key={idx} className="border p-2">
+                    <div key={idx} className={isToday(day) ? "today" : ""}>
                         <div className="font-bold">
                             {`${WEEKDAYS[day.getDay()]} (${day.getMonth() + 1}/${day.getDate()})`}
                         </div>
-                        <ul className="mt-1 space-y-1">
+                        <ul>
                             {dayEvents.map(event => (
-                                <li key={event.id} className="text-sm bg-gray-100 p-1 rounded">
-                                    {event.title}
-                                </li>
+                                <li key={event.id}>{event.title}</li>
                             ))}
                         </ul>
                     </div>

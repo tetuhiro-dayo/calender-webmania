@@ -1,0 +1,74 @@
+.week-view {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.week-view > div {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    background-color: #fff;
+    transition: box-shadow 0.2s ease;
+}
+
+.week-view > div:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.week-view .font-bold {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.week-view ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.week-view li {
+    background-color: #f5f5f5;
+    padding: 6px 10px;
+    margin-bottom: 6px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: #222;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.today {
+    background-color: var(--main-color-light);
+    border: 2px solid var(--main-color);
+    position: relative;
+}
+
+.today::before {
+    content: "Today";
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background-color: white;
+    color: var(--main-color-fg);
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .week-view {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .week-view {
+        grid-template-columns: 1fr;
+    }
+}

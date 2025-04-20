@@ -250,7 +250,7 @@ h1#title::after {
     border-color: var(--main-color-light);
 }
 
-:is(button, ::file-selector-button, ::-webkit-file-upload-button) {
+:is(button, ::file-selector-button, ::-webkit-file-upload-button, .button) {
     background-color: var(--main-color);
     color: white;
     border: none;
@@ -272,12 +272,12 @@ input[type="file"] {
     margin-right: 0.8rem;
 }
 
-a {
+a:not(.button) {
     text-decoration: none;
     color: var(--main-color-fg);
     transition: color 0.3s;
-}
 
-a:hover {
-    color: var(--main-color-fg-light);
+    &:hover {
+        color: var(--main-color-fg-light);
+    }
 }
