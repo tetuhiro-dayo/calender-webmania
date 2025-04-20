@@ -4,11 +4,11 @@ import { useEffect, useMemo, useState } from "react";
 import { FetchEvents } from "@/lib/api/events";
 import { EventType } from "@/types";
 import toast from "react-hot-toast";
+import { getToken } from "@/functions/getToken";
 
 interface Props {
     date: Date;
     onDateClick: (date: string) => void;
-    token: string;
 }
 
 const DAYS = ["日", "月", "火", "水", "木", "金", "土"];
@@ -16,7 +16,7 @@ const DAYS = ["日", "月", "火", "水", "木", "金", "土"];
 const formatDate = (y: number, m: number, d: number) =>
     `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 
-const MonthView = ({ date, onDateClick, token }: Props) => {
+const MonthView = ({ date, onDateClick }: Props) => {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const startDate = new Date(year, month - 1, 1);
@@ -24,6 +24,7 @@ const MonthView = ({ date, onDateClick, token }: Props) => {
     const startDay = startDate.getDay();
     const daysInMonth = endDate.getDate();
     const todayStr = new Date().toISOString().split("T")[0];
+    const token = getToken();
 
     const [events, setEvents] = useState<EventType[]>([]);
 

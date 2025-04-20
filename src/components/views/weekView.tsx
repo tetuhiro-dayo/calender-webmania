@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { FetchEvents } from "@/lib/api/events";
 import { EventType } from "@/types";
 import toast from "react-hot-toast";
+import { getToken } from "@/functions/getToken";
 
 interface Props {
     date: Date;
-    token?: string;
 }
 
 const getWeekStart = (date: Date) => {
@@ -25,9 +25,10 @@ const addDays = (date: Date, days: number) => {
 
 const WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"];
 
-const WeekView = ({ date, token = "" }: Props) => {
+const WeekView = ({ date }: Props) => {
     const weekStart = getWeekStart(date);
     const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
+    const token = getToken();
 
     const [events, setEvents] = useState<EventType[]>([]);
 

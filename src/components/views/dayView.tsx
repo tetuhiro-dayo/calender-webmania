@@ -5,19 +5,20 @@ import { FetchEvents } from "@/lib/api/events";
 import { EventType } from "@/types";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import { getToken } from "@/functions/getToken";
 
 interface Props {
     date: Date;
-    token?: string;
 }
 
 const formatDate = (date: Date) => {
     return date.toISOString().split("T")[0];
 };
 
-const DayView = ({ date, token = "" }: Props) => {
+const DayView = ({ date }: Props) => {
     const [events, setEvents] = useState<EventType[]>([]);
     const dateStr = formatDate(date);
+    const token = getToken();
 
     useEffect(() => {
         const fetchDayEvents = async () => {

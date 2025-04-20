@@ -6,19 +6,18 @@ import YearView from "./yearView";
 
 interface Props {
     date: Date;
-    token: string;
     viewType: ViewType;
     onDateClick?: (date: string) => void;
 }
 
-const View = ({ date, token, viewType, onDateClick }: Props) => {
+const View = ({ date, viewType, onDateClick }: Props) => {
     switch (viewType) {
         case "month":
-            return <MonthView date={date} token={token} onDateClick={onDateClick!} />;
+            return <MonthView date={date} onDateClick={onDateClick!} />;
         case "week":
-            return <WeekView date={date} token={token} />;
+            return <WeekView date={date} />;
         case "day":
-            return <DayView date={date} token={token} />;
+            return <DayView date={date} />;
         case "year":
             const year = date.getFullYear();
             return <YearView year={year} />;
