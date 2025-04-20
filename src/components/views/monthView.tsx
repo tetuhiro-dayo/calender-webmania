@@ -16,7 +16,7 @@ const DAYS = ["日", "月", "火", "水", "木", "金", "土"];
 const formatDate = (y: number, m: number, d: number) =>
     `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 
-const Calendar = ({ date, onDateClick, token }: Props) => {
+const MonthView = ({ date, onDateClick, token }: Props) => {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const startDate = new Date(year, month - 1, 1);
@@ -115,4 +115,4 @@ const Calendar = ({ date, onDateClick, token }: Props) => {
     );
 };
 
-export default Calendar;
+export default MonthView;

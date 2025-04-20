@@ -14,3 +14,5 @@ export type ArtType = {
     userId: number;
     created_at: string;
 };
+
+export type ViewType = "month" | "week" | "day" | "year";

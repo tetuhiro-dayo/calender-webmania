@@ -1,10 +1,8 @@
-import type { Metadata } from "next";
-import Home from "@/components/home";
-
-export const metadata: Metadata = {
-    title: "カレンダー",
-};
+import { redirect } from "next/navigation";
 
 export default function HomePage() {
-    return <Home />;
+    const now = new Date();
+    redirect(`/month/${now.getFullYear()}-${now.getMonth() + 1}`);
+
+    return null;
 }

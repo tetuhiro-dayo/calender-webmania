@@ -1,20 +1,23 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import Modal from "./modal";
-import type { ArtType } from "@/types";
+import type { ArtType, ViewType } from "@/types";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import UploadArt from "./uploadArt";
 import { error } from "@/functions/error";
-import Calendar from "./calender";
 import { CreateEvent } from "@/lib/api/events";
 import { GetArt } from "@/lib/api/art";
+import View from "./views/View";
 
-const Home = () => {
-    const today = useMemo(() => new Date(), []);
-    const [currentDate, setCurrentDate] = useState(today);
+interface Props {
+    date: Date;
+    viewType: ViewType;
+}
+
+const CalenderPage = ({ date, viewType }: Props) => {
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const [newTitle, setNewTitle] = useState("");
     const [art, setArt] = useState<ArtType | null>(null);
@@ -42,11 +45,10 @@ const Home = () => {
 
     // 月変更処理
     const changeMonth = (increment: number) => {
-        setCurrentDate(prev => {
-            const newDate = new Date(prev);
-            newDate.setMonth(newDate.getMonth() + increment);
-            return newDate;
-        });
+        const newDate = new Date(date);
+        newDate.setMonth(newDate.getMonth() + increment);
+        const path = `/month/${newDate.getFullYear()}-${String(newDate.getMonth() + 1).padStart(2, "0")}`;
+        router.push(path);
     };
 
     // 季節のイラスト取得
@@ -54,8 +56,8 @@ const Home = () => {
         const fetchArt = async () => {
             try {
                 const data = await GetArt({
-                    year: currentDate.getFullYear(),
-                    month: currentDate.getMonth() + 1,
+                    year: date.getFullYear(),
+                    month: date.getMonth() + 1,
                 });
                 setArt(data); // ← APIレスポンスに応じて調整
             } catch (err) {
@@ -64,10 +66,10 @@ const Home = () => {
         };
 
         fetchArt();
-    }, [currentDate]);
+    }, [date]);
 
     return (
-        <div className="calendar-container">
+        <div className="calender-container">
             {art ? (
                 <div className="image">
                     <Image
@@ -85,7 +87,7 @@ const Home = () => {
             )}
 
             <h1 className="calendar-title">
-                {currentDate.getFullYear()}年{currentDate.getMonth() + 1}月
+                {date.getFullYear()}年{date.getMonth() + 1}月
             </h1>
 
             <div className="calendar-nav">
@@ -97,17 +99,20 @@ const Home = () => {
                 </button>
             </div>
 
-            <Calendar
-                date={currentDate}
-                token={token}
-                onDateClick={date => {
-                    if (token) {
-                        setSelectedDate(date); // クリックで日付セット
-                    } else {
-                        toLoginPage();
-                    }
-                }}
-            />
+            {
+                <View
+                    viewType={viewType}
+                    date={date}
+                    token={token}
+                    onDateClick={date => {
+                        if (token) {
+                            setSelectedDate(date); // クリックで日付セット
+                        } else {
+                            toLoginPage();
+                        }
+                    }}
+                />
+            }
             {selectedDate && token && (
                 <Modal
                     title={selectedDate + " にイベント追加"}
@@ -135,4 +140,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default CalenderPage;
