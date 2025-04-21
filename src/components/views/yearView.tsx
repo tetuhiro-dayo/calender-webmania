@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import MonthView from "./monthView";
+import { useRouter } from "next/navigation";
 
 interface Props {
     year: number;
@@ -8,16 +9,19 @@ interface Props {
 
 const YearView = ({ year }: Props) => {
     const months = Array.from({ length: 12 }, (_, i) => i + 1);
+    const router = useRouter();
 
     return (
-        <div className="grid grid-cols-3 gap-4 p-4">
+        <div className="year-view">
             {months.map(month => (
-                <Link
+                <MonthView
                     key={month}
-                    href={`/month/${year}-${String(month).padStart(2, "0")}`}
-                    className="p-4 border rounded hover:bg-gray-100 text-center">
-                    {month}月
-                </Link>
+                    date={new Date(year, month - 1)}
+                    onDateClick={date => {
+                        router.push("/day/" + date);
+                    }}
+                    miniMode
+                />
             ))}
         </div>
     );

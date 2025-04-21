@@ -14,16 +14,16 @@ const ViewSwitcher = ({ viewType, date }: Props) => {
     const day = String(date.getDate()).padStart(2, "0");
     return (
         <div className="view-switcher">
-            <Link className={"button " + viewType === "year" ? "active" : ""} href={`/year/${year}`}>
+            <Link className={`button ${viewType === "year" ? "active" : ""}`} href={`/year/${year}`}>
                 年
             </Link>
-            <Link className={"button " + viewType === "month" ? "active" : ""} href={`/month/${year}-${month}`}>
+            <Link className={`button ${viewType === "month" ? "active" : ""}`} href={`/month/${year}-${month}`}>
                 月
             </Link>
-            <Link className={"button " + viewType === "week" ? "active" : ""} href={`/week/${year}-${month}-${day}`}>
+            <Link className={`button ${viewType === "week" ? "active" : ""}`} href={`/week/${year}-${month}-${day}`}>
                 週
             </Link>
-            <Link className={"button " + viewType === "day" ? "active" : ""} href={`/day/${year}-${month}-${day}`}>
+            <Link className={`button ${viewType === "day" ? "active" : ""}`} href={`/day/${year}-${month}-${day}`}>
                 日
             </Link>
         </div>

@@ -5,7 +5,6 @@ import { FetchEvents } from "@/lib/api/events";
 import { EventType } from "@/types";
 import toast from "react-hot-toast";
 import { getToken } from "@/functions/getToken";
-import "@/styles/week.css";
 import { isToday } from "@/functions/isToday";
 
 interface Props {
@@ -40,8 +39,10 @@ const WeekView = ({ date }: Props) => {
             const end = addDays(weekStart, 7).toISOString().split("T")[0];
 
             try {
-                const data = await FetchEvents(start, end, token);
-                setEvents(data);
+                const result = await FetchEvents(start, end, token);
+                if (result) {
+                    setEvents(result);
+                }
             } catch (err: unknown) {
                 console.error(err);
                 toast.error("週のイベント取得に失敗しました");

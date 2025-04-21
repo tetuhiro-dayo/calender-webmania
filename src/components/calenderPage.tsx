@@ -46,10 +46,39 @@ const CalenderPage = ({ date, viewType }: Props) => {
     };
 
     // 月変更処理
-    const changeMonth = (increment: number) => {
+    const changeDate = (increment: number) => {
         const newDate = new Date(date);
-        newDate.setMonth(newDate.getMonth() + increment);
-        const path = `/month/${newDate.getFullYear()}-${String(newDate.getMonth() + 1).padStart(2, "0")}`;
+
+        let path = "";
+        switch (viewType) {
+            case "month":
+                newDate.setMonth(newDate.getMonth() + increment);
+                path = `/month/${newDate.getFullYear()}-${String(newDate.getMonth() + 1).padStart(2, "0")}`;
+                break;
+
+            case "week":
+                newDate.setDate(newDate.getDate() + increment * 7);
+                path = `/week/${newDate.getFullYear()}-${String(newDate.getMonth() + 1).padStart(2, "0")}-${String(
+                    newDate.getDate(),
+                ).padStart(2, "0")}`;
+                break;
+
+            case "day":
+                newDate.setDate(newDate.getDate() + increment);
+                path = `/day/${newDate.getFullYear()}-${String(newDate.getMonth() + 1).padStart(2, "0")}-${String(
+                    newDate.getDate(),
+                ).padStart(2, "0")}`;
+                break;
+
+            case "year":
+                newDate.setFullYear(newDate.getFullYear() + increment);
+                path = `/year/${newDate.getFullYear()}`;
+                break;
+
+            default:
+                throw new Error("invalid viewType: " + viewType);
+        }
+
         router.push(path);
     };
 
@@ -92,15 +121,15 @@ const CalenderPage = ({ date, viewType }: Props) => {
                 {date.getFullYear()}年{date.getMonth() + 1}月
             </h1>
 
+            <ViewSwitcher viewType={viewType} date={date} />
             <div className="calendar-nav">
-                <button id="prev" onClick={() => changeMonth(-1)}>
-                    〈 前月
+                <button id="prev" onClick={() => changeDate(-1)}>
+                    〈 前
                 </button>
-                <button id="next" onClick={() => changeMonth(1)}>
-                    次月 〉
+                <button id="next" onClick={() => changeDate(1)}>
+                    次 〉
                 </button>
             </div>
-            <ViewSwitcher viewType={viewType} date={date} />
 
             {
                 <View

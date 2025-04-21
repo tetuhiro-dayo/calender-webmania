@@ -36,8 +36,11 @@ const DayView = ({ date }: Props) => {
     return (
         <div className="day-view p-4 border rounded">
             <h2 className="text-lg font-bold mb-2">
-                <Link href={"/year/" + date.getFullYear()}>${date.getFullYear()}</Link>
-                <Link href={"/month/" + date.getMonth() + 1}>{date.getMonth() + 1}</Link> のイベント
+                <Link href={`/year/${date.getFullYear()}`}>{date.getFullYear()}</Link>/
+                <Link href={`/month/${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`}>
+                    {date.getMonth() + 1}
+                </Link>
+                のイベント
             </h2>
             {events.length > 0 ? (
                 <ul className="space-y-2">

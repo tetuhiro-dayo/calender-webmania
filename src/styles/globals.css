@@ -49,60 +49,6 @@ button#next:hover {
     margin-left: auto;
 }
 
-#table table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 5px;
-    margin: 1rem 0;
-}
-
-#table td {
-    padding: 12px 8px;
-    text-align: center;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-}
-
-#table td.is-disabled {
-    color: rgb(153, 153, 153);
-}
-
-#table td:hover:not(.is-disabled) {
-    background-color: #f5f5f5;
-    transform: scale(1.05);
-}
-
-#table h1 {
-    color: #333;
-    margin: 1rem 0;
-    font-size: 1.8rem;
-    font-weight: 500;
-}
-
-#table td.today {
-    background-color: var(--main-color);
-    color: white;
-    font-weight: bold;
-    position: relative;
-}
-
-#table td.today:hover {
-    background-color: var(--main-color-light);
-}
-
-#table td.today::before {
-    content: "Today";
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    font-size: 0.6rem;
-    background: white;
-    color: var(--main-color);
-    padding: 2px 4px;
-    border-radius: 4px;
-}
-
 @media (max-width: 600px) {
     body {
         padding: 1rem;
@@ -169,7 +115,7 @@ h1#title::after {
     gap: 0.5rem;
 }
 
-.view-switcher button {
+.view-switcher a {
     background-color: var(--main-color);
     color: white;
     border: none;
@@ -180,13 +126,15 @@ h1#title::after {
     transition: background-color 0.3s;
 }
 
-.view-switcher button:hover {
+.view-switcher a:hover {
     background-color: var(--main-color-light);
 }
 
-.view-switcher button.active {
+.view-switcher a.active {
     background-color: var(--main-color-fg-light);
     font-weight: bold;
+    border-bottom: 3px solid white;
+    text-decoration: none;
 }
 
 .overlay {

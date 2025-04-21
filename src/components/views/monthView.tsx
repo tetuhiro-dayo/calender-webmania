@@ -5,10 +5,12 @@ import { FetchEvents } from "@/lib/api/events";
 import { EventType } from "@/types";
 import toast from "react-hot-toast";
 import { getToken } from "@/functions/getToken";
+import Link from "next/link";
 
 interface Props {
     date: Date;
     onDateClick: (date: string) => void;
+    miniMode?: boolean;
 }
 
 const DAYS = ["日", "月", "火", "水", "木", "金", "土"];
@@ -16,7 +18,7 @@ const DAYS = ["日", "月", "火", "水", "木", "金", "土"];
 const formatDate = (y: number, m: number, d: number) =>
     `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 
-const MonthView = ({ date, onDateClick }: Props) => {
+const MonthView = ({ date, onDateClick, miniMode: mini = false }: Props) => {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const startDate = new Date(year, month - 1, 1);
@@ -41,8 +43,10 @@ const MonthView = ({ date, onDateClick }: Props) => {
             const end = new Date(year, month, 0).toISOString().split("T")[0];
 
             try {
-                const data = await FetchEvents(start, end, token);
-                setEvents(data);
+                const result = await FetchEvents(start, end, token);
+                if (result) {
+                    setEvents(result);
+                }
             } catch (err) {
                 const message = err instanceof Error ? err.message : String(err);
                 if (message !== "Login.") {
@@ -101,12 +105,17 @@ const MonthView = ({ date, onDateClick }: Props) => {
     );
 
     return (
-        <div id="table" className="calendar-table">
+        <div id="table" className={`calendar-table ${mini ? "mini" : ""}`}>
+            {mini && (
+                <Link href={`/month/${year}-${month}`} className="mini-month-title">
+                    {year}年 {month}月
+                </Link>
+            )}
             <table>
                 <thead>
                     <tr>
                         {DAYS.map(day => (
-                            <th key={day}>{day}</th>
+                            <th key={day}>{mini ? day[0] : day}</th>
                         ))}
                     </tr>
                 </thead>
