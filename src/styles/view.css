@@ -169,6 +169,10 @@
     border: 1px solid #ddd;
     height: 30px;
     vertical-align: top;
+    &.today::before {
+        font-size: 0.3rem;
+        padding: 1px 2px;
+    }
 }
 
 .calendar-table.mini .calendar-event {

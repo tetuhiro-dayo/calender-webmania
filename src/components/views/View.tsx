@@ -19,8 +19,7 @@ const View = ({ date, viewType, onDateClick }: Props) => {
         case "day":
             return <DayView date={date} />;
         case "year":
-            const year = date.getFullYear();
-            return <YearView year={year} />;
+            return <YearView date={date} />;
         default:
             return null;
     }

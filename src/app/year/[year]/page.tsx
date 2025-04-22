@@ -11,5 +11,5 @@ export default async function YearPage({ params }: Props) {
         notFound();
     }
 
-    return <CalenderPage date={new Date(year)} viewType="year" />;
+    return <CalenderPage date={new Date(year, 0)} viewType="year" />;
 }

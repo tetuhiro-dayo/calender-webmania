@@ -4,12 +4,13 @@ import MonthView from "./monthView";
 import { useRouter } from "next/navigation";
 
 interface Props {
-    year: number;
+    date: Date;
 }
 
-const YearView = ({ year }: Props) => {
+const YearView = ({ date }: Props) => {
     const months = Array.from({ length: 12 }, (_, i) => i + 1);
     const router = useRouter();
+    const year = date.getFullYear();
 
     return (
         <div className="year-view">
