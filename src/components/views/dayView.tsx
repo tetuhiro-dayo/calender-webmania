@@ -40,6 +40,7 @@ const DayView = ({ date }: Props) => {
                 <Link href={`/month/${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`}>
                     {date.getMonth() + 1}
                 </Link>
+                /{date.getDate()}
                 のイベント
             </h2>
             {events.length > 0 ? (
